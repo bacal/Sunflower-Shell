@@ -1,8 +1,8 @@
 #A Makefile for the B(acal) Shell!
-
+CC=gcc
 TARGET=bsh
-FLAGS="-o"
+FLAGS=-Wall -pedantic -o 
 all:
-	gcc $(FLAGS) $(TARGET) $(TARGET).c
+	$(CC) $(TARGET).c $(FLAGS) $(TARGET)
 clean:
 	rm $(TARGET)

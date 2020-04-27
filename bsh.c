@@ -2,14 +2,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#define ARGS 2
-#define BUFFERSIZE 1024
+#define BUFFERSIZE 256
+#define BUFFER 64
 
 void bsh_loop(); //prints out the current user's name and hostname
 char* bsh_getline();//gets a line from stdin and returns a string
-int bsh_process(char *args);//parses and process arguements provided from getline
+char** bsh_split(char*);//reads in a string from bsh_getline, and returns an array of strings
+int bsh_process(char**);//parses and process arguements provided from the bsh_split function
 
-char *knownArgs[ARGS] = {"cd","exit"};// a "list" of known arguements.
+void bsh_cd(char **str);
+
+
 
 int main(int argc, const char **argv){
 
@@ -27,33 +30,51 @@ void bsh_loop(){
 
 	int condition=1;
 	char *args;
+	char **bsplt;
 
 	while(condition){
-		printf("[%s@%s]:%s> ",name,hostname,cwd);//prints the user's name, hostname, and current directory
+	printf("[%s@%s]:%s$ ",name,hostname,cwd);//prints the user's name, hostname, and current directory
 		args = bsh_getline();
-		condition = bsh_process(args);
-		
+		bsplt = bsh_split(args);
+		condition = bsh_process(bsplt);
+		printf("looped");
+		free(args);
+		free(bsplt);
+
 	}
 }
 
 char* bsh_getline(){
-
-	char *args = malloc(BUFFERSIZE*sizeof(char));
-	char input;
-	while(1){
-		input = getchar();
-
-			if(input==NULL || input=='\n' || input==EOF){
-				return &input;
-			}
-		return args;
-	}
+	//fflush(stdin);
+	char *args =NULL;
+	size_t size =0;	
+	getline(&args,&size,stdin);
+	printf("%s\n",args);
+	return args;
 }
-int bsh_process(char *args){
-	for(int i=0; i<ARGS; i++){
-		if(strcmp(args,"exit")==0)
-			return 0;
-			
-	}
+int bsh_process(char **args){
 
+}
+
+char** bsh_split(char *str){
+	int strpos=0;
+	int len=0;
+	int i=0;
+	char** split=malloc(BUFFER*sizeof(char));
+	//printf("%d",2*strlen(str)*sizeof(char));
+	for(i=0; i<strlen(str); i++){
+		if((int)str[i]==32){
+			split[len][strpos]='\0';
+			len++;
+			strpos=0;
+		}
+		else{
+			split[len][strpos]=str[i];
+			strpos++;
+		}
+
+	}
+	printf("len: %d\n",len);
+	len++;
+	return split;
 }
