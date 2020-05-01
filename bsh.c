@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
-#define BSH_PREDEFS 4
+#define BSH_PREDEFS 2
 #define BUFFERSIZE 256
 #define BUFFER 64
 
@@ -15,11 +15,10 @@ int bsh_process(char**);//parses and process arguements provided from the bsh_sp
 void bsh_execute(char**);
 void bsh_systemrun(char**);
 void bsh_cd(char**);//changes the directory
-void bsh_ls(char**);//prints list of current directory
 void bsh_clear();//clears screen
 
 
-char *predefined[]={"cd","ls","logoff", "clear"};
+char *predefined[]={"cd","clear"};
 
 int main(int argc, const char **argv){
 
@@ -84,8 +83,6 @@ int bsh_process(char **args){
 void bsh_execute(char **args){
 	if(strcmp(args[0],"cd")==0)
 		bsh_cd(args);
-	else if (strcmp(args[0],"ls")==0)
-		bsh_ls(args);
 	else if (strcmp(args[0],"clear")==0)
 		bsh_clear();
 }

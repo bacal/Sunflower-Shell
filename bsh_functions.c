@@ -26,15 +26,7 @@ void bsh_cd(char **dir){
 void bsh_clear(){
   system("clear");
 }
-void bsh_ls(char **command){
-	char *string = malloc(50*sizeof(char));
-  strcpy(string,command[0]);
-  if(command[1]!=NULL){
-    strcat(string," ");
-    strcat(string,command[1]);
-  }
-  system(string);
-}
+
 void bsh_systemrun(char **command){
   char *string = malloc(50*sizeof(char));
   strcpy(string,command[0]);
