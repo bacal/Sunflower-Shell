@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
-#define BSH_PREDEFS 2
+#define BSH_PREDEFS 4
 #define BUFFERSIZE 256
 #define BUFFER 64
 
@@ -16,9 +16,10 @@ void bsh_execute(char**);
 void bsh_systemrun(char**);
 void bsh_cd(char**);//changes the directory
 void bsh_clear();//clears screen
+int bsh_cat(char**);//prints out the contents of a file
 
 
-char *predefined[]={"cd","clear"};
+char *predefined[]={"cd","clear","cat","crfl"};
 
 int main(int argc, const char **argv){
 
@@ -85,17 +86,20 @@ void bsh_execute(char **args){
 		bsh_cd(args);
 	else if (strcmp(args[0],"clear")==0)
 		bsh_clear();
+	else if (strcmp(args[0],"cat")==0)
+		bsh_cat(args);
 }
 
 
 char** bsh_split(char *str){
 	int i =0;
 	char delim[] = " \t\r\t\n\v";
-	char **bsplt = malloc(2*BUFFERSIZE*sizeof(char));
+	char **bsplt = malloc(10*BUFFERSIZE*sizeof(char));
 	bsplt[i] = strtok(str,delim);
 	while(bsplt[i]!=NULL){
 			i++;
 			bsplt[i] = strtok(NULL,delim);
+
 	}
 	return bsplt;
 }
