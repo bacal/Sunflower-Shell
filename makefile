@@ -3,6 +3,6 @@ CC=gcc
 TARGET=bsh
 FLAGS=-Wall -pedantic -o 
 all:
-	$(CC) $(TARGET).c $(FLAGS) $(TARGET)
+	$(CC) $(TARGET).c $(TARGET)_functions.c $(FLAGS) $(TARGET)
 clean:
 	rm $(TARGET)
