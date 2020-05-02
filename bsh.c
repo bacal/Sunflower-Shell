@@ -4,6 +4,13 @@
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
+#define ANSI_COLOR_RED "\x1b[31m"
+#define ANSI_COLOR_GREEN "\x1b[32m"
+#define ANSI_COLOR_YELLOW "\x1b[33m"
+#define ANSI_COLOR_BLUE "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN "\x1b[36m"
+#define ANSI_COLOR_RESET "\x1b[0m"
 
 #define HOSTSIZE 1024
 #define BSH_PREDEFS 4
@@ -66,7 +73,7 @@ char* bsh_getuserinfo(){
 		strcpy(cwd,"~");
 	//bsh_disphome(cwd);
 
-	sprintf(userinfo,"[%s@%s]:%s$ ",name,hostname,cwd);//prints the user's name, hostname, and current directory
+	sprintf(userinfo,"[%s@%s]:%s$ ",name,hostname,cwd);
 	return userinfo;
 }
 
@@ -80,6 +87,9 @@ char* bsh_getline(){
 int bsh_process(char **args){
 	int i=0;
 	bool bsh_ran=false;
+	if(args[0]==NULL){
+		return 1;
+	}
 	for(i=0; i< BSH_PREDEFS; i++){
 		if(strcmp(args[0],predefined[i])==0){
 				bsh_execute(args); // executes the predefined arguement if it exists
@@ -109,8 +119,12 @@ void bsh_execute(char **args){
 
 char** bsh_split(char *str){
 	int i =0;
+
 	char delim[] = " \t\r\t\n\v";
 	char **bsplt = malloc(10*BUFFERSIZE*sizeof(char));
+	if(strcmp(str," ")){
+		bsplt[0] = NULL;
+	}
 	bsplt[i] = strtok(str,delim);
 	while(bsplt[i]!=NULL){
 			i++;
