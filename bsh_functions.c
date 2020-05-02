@@ -45,23 +45,26 @@ int bsh_cat(char **command){
 
 	FILE** files = malloc(count*sizeof(FILE));
 	for(i=0;i<count;i++){
+
 		files[i] = fopen(command[i+1],"r");
 		if(files[i]!=NULL)
 			opened++;
+		else{
+			files[i]=NULL;
+			printf("cat: %s: Invalid Filename\n",command[i+1]);
+			}
 	}
-	printf("count: %d\n",count);
 	if(opened>0){
 	for(i=0;i<count;i++){
 			char text;
+			if(files[i]!=NULL){
 	      while((text = fgetc(files[i]))!=EOF)
                 printf("%c",text);
-        fclose(files[i]);
+        				fclose(files[i]);
+				}
 			}
 		}
-		else{
-			for(i=0;i<count;i++)
-				printf("cat: %s: invalid filename\n",command[i+1]);
-		}
+
 	return 0;
 }
 void bsh_create(char **command){
