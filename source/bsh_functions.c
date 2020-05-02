@@ -4,24 +4,10 @@
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
-#define ANSI_COLOR_RED "\x1b[31m"
-#define ANSI_COLOR_GREEN "\x1b[32m"
-#define ANSI_COLOR_YELLOW "\x1b[33m"
-#define ANSI_COLOR_BLUE "\x1b[34m"
-#define ANSI_COLOR_MAGENTA "\x1b[35m"
-#define ANSI_COLOR_CYAN "\x1b[36m"
-#define ANSI_COLOR_RESET "\x1b[0m"
-
 #define HOSTSIZE 1024
 #define BSH_PREDEFS 4
 #define BUFFERSIZE 256
 #define BUFFER 64
-
-void bsh_loop(); //prints out the current user's name and hostname
-char* bsh_getuserinfo();//gets the user's name, hostname and current dir
-char* bsh_getline();//gets a line from stdin and returns a string
-char** bsh_split(char*);//reads in a string from bsh_getline, and returns an array of strings
-int bsh_process(char**);//parses and process arguements provided from the bsh_split function
 void bsh_execute(char**);
 void bsh_systemrun(char**);
 void bsh_create(char**);//create new files with the name inputted by the user
@@ -29,32 +15,7 @@ void bsh_cd(char**);//changes the directory
 void bsh_clear();//clears screen
 int bsh_cat(char**);//prints out the contents of a file
 
-
 char *predefined[]={"cd","clear","cat","create"};
-
-int main(int argc, const char **argv){
-
-	bsh_loop();//runs infinite loop
-
-	return 0;
-}
-
-void bsh_loop(){
-
-	int condition=1;
-	char *args;
-	char **bsplt;
-
-	while(condition){
-		printf("%s",bsh_getuserinfo());
-		args = bsh_getline();
-		bsplt = bsh_split(args);
-		condition = bsh_process(bsplt);
-		free(args);
-		free(bsplt);
-
-	}
-}
 
 char* bsh_getuserinfo(){
 	struct passwd *p;
@@ -74,6 +35,10 @@ char* bsh_getuserinfo(){
 	//bsh_disphome(cwd);
 
 	sprintf(userinfo,"[%s@%s]:%s$ ",name,hostname,cwd);
+	free(name);
+	free(home);
+	free(hostname);
+	free(cwd);
 	return userinfo;
 }
 

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
@@ -64,7 +63,6 @@ int bsh_cat(char **command){
 				}
 			}
 		}
-
 	return 0;
 }
 void bsh_create(char **command){
