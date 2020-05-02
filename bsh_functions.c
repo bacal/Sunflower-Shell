@@ -3,10 +3,15 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <pwd.h>
+
 #define SYS 200
 void bsh_cd(char **dir){
-	char *name = getlogin();
+	struct passwd *p;
+	char *name;
 	char *home = malloc(40*sizeof(char));
+	if ((p = getpwuid(getuid())) != NULL)
+			 name = p->pw_name;
 	strcpy(home,"/home/");
 	strcat(home,name);
 	if(dir[1]!=NULL){

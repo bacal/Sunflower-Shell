@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
+#include <pwd.h>
+
 #define BSH_PREDEFS 4
 #define BUFFERSIZE 256
 #define BUFFER 64
@@ -46,12 +48,20 @@ void bsh_loop(){
 }
 
 char* bsh_getuserinfo(){
+	struct passwd *p;
+	char *name;
+	char *home = malloc(40*sizeof(char));
 	char *userinfo=malloc(60*sizeof(char));
-	char *name = getlogin();//gets the current user's login name
 	char *hostname=malloc(25*sizeof(char));//allocates 25 characters to hostname array
 	char *cwd = malloc(40*sizeof(char)); //allocates 40 bytes to the
+	if ((p = getpwuid(getuid())) != NULL)
+			 name = p->pw_name;
 	gethostname(hostname,sizeof(hostname));//gets hostname
 	getcwd(cwd,4000);
+	strcpy(home,"/home/");
+	strcat(home,name);
+	if(strcmp(cwd,home)==0)
+		strcpy(cwd,"~");
 	sprintf(userinfo,"[%s@%s]:%s$ ",name,hostname,cwd);//prints the user's name, hostname, and current directory
 	return userinfo;
 }
