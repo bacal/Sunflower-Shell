@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <pwd.h>
 
+#define HOSTSIZE 1024
 #define BSH_PREDEFS 4
 #define BUFFERSIZE 256
 #define BUFFER 64
@@ -53,11 +54,11 @@ char* bsh_getuserinfo(){
 	char *name;
 	char *home = malloc(40*sizeof(char));
 	char *userinfo=malloc(60*sizeof(char));
-	char *hostname=malloc(25*sizeof(char));//allocates 25 characters to hostname array
+	char *hostname=malloc(HOSTSIZE*sizeof(char));//allocates hostsize characters to hostname array
 	char *cwd = malloc(40*sizeof(char)); //allocates 40 bytes to the
 	if ((p = getpwuid(getuid())) != NULL)
 			 name = p->pw_name;
-	gethostname(hostname,sizeof(hostname));//gets hostname
+	gethostname(hostname,HOSTSIZE);//gets hostname
 	getcwd(cwd,4000);
 	strcpy(home,"/home/");
 	strcat(home,name);
