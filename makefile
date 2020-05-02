@@ -1,18 +1,26 @@
 #A Makefile for the B-Shell!
 CC=gcc
-TARGET=bin/bsh
+NAME=bsh
+TARGET=./bin/
+SOURCE=./source/
+SYS=/bin/
 FLAGS=-Wall -lm -pedantic -o
 
 bsh: bsh.o bsh_predefined.o bsh_functions.o
-	$(CC) $(TARGET).o $(TARGET)_predefined.o $(TARGET)_functions.o $(FLAGS) $(TARGET)
-bsh.o: source/bsh.c
-	$(CC) -c source/bsh.c
-	mv bsh.o bin/
-bsh_predefined.o: source/bsh_predefined.c
-	$(CC) -c source/bsh_predefined.c
+	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_predefined.o $(TARGET)$(NAME)_functions.o $(FLAGS) $(NAME)
+bsh.o: $(SOURCE)bsh.c
+	$(CC) -c $(SOURCE)bsh.c
+	mv bsh.o $(TARGET)
+bsh_predefined.o: $(SOURCE)bsh_predefined.c
+	$(CC) -c $(SOURCE)bsh_predefined.c
 	mv bsh_predefined.o bin/
-bsh_functions.o:	source/bsh_functions.c
-	$(CC) -c source/bsh_functions.c
+bsh_functions.o:	$(SOURCE)bsh_functions.c
+	$(CC) -c $(SOURCE)bsh_functions.c
 	mv bsh_functions.o bin/
+install:
+	cp -r $(NAME) $(SYS)
+uninstall:
+	rm $(SYS)$(NAME)
 clean:
+	rm $(NAME)
 	rm $(TARGET)*
