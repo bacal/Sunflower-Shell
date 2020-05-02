@@ -1,7 +1,7 @@
 # B-Shell
 A simple shell written in C
 
-Current builtin commands are  
+Current built in commands are  
 - cd
 - cat
 - clear
