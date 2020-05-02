@@ -16,12 +16,13 @@ char** bsh_split(char*);//reads in a string from bsh_getline, and returns an arr
 int bsh_process(char**);//parses and process arguements provided from the bsh_split function
 void bsh_execute(char**);
 void bsh_systemrun(char**);
+void bsh_create(char**);//create new files with the name inputted by the user
 void bsh_cd(char**);//changes the directory
 void bsh_clear();//clears screen
 int bsh_cat(char**);//prints out the contents of a file
 
 
-char *predefined[]={"cd","clear","cat","crfl"};
+char *predefined[]={"cd","clear","cat","create"};
 
 int main(int argc, const char **argv){
 
@@ -62,6 +63,8 @@ char* bsh_getuserinfo(){
 	strcat(home,name);
 	if(strcmp(cwd,home)==0)
 		strcpy(cwd,"~");
+	//bsh_disphome(cwd);
+
 	sprintf(userinfo,"[%s@%s]:%s$ ",name,hostname,cwd);//prints the user's name, hostname, and current directory
 	return userinfo;
 }
@@ -98,6 +101,8 @@ void bsh_execute(char **args){
 		bsh_clear();
 	else if (strcmp(args[0],"cat")==0)
 		bsh_cat(args);
+	else if (strcmp(args[0],"create")==0)
+		bsh_create(args);
 }
 
 

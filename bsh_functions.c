@@ -64,6 +64,15 @@ int bsh_cat(char **command){
 		}
 	return 0;
 }
+void bsh_create(char **command){
+	int i=1;
+	while(command[i]!=NULL){
+		FILE* fp = fopen(command[i],"w+");
+		fprintf(fp," ");
+		fclose(fp);
+		i++;
+	}
+}
 void bsh_systemrun(char **command){
 	int i=1, count=0;
   char *string = malloc(SYS*sizeof(char));
