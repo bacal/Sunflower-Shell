@@ -10,7 +10,7 @@ void bsh_cd(char **dir){
 	char *name;
 	char *home = malloc(40*sizeof(char));
 	if ((p = getpwuid(getuid())) != NULL)
-			 name = p->pw_name;
+		name = p->pw_name;
 	strcpy(home,"/home/");
 	strcat(home,name);
 	if(dir[1]!=NULL){
@@ -18,23 +18,23 @@ void bsh_cd(char **dir){
 			chdir(home);
 
 		}
-    else
-      chdir(dir[1]);
+		else
+			chdir(dir[1]);
 	}
-  else{
-    chdir(home);
-  }
-  	free(home);
+	else{
+		chdir(home);
+	}
+	free(home);
 }
 
 void bsh_clear(){
-  system("clear");
+	system("clear");
 }
 int bsh_cat(char **command){
 	int i=1,count=0, opened = 0;
 	if(command[1]==NULL){
-					printf("Usage: cat <filename>\n");
-					return 1;
+		printf("Usage: cat <filename>\n");
+		return 1;
 	}
 	while(command[i]!=NULL){
 		count++;
@@ -51,18 +51,18 @@ int bsh_cat(char **command){
 		else{
 			files[i]=NULL;
 			printf("cat: %s: Invalid Filename\n",command[i+1]);
-			}
+		}
 	}
 	if(opened>0){
-	for(i=0;i<count;i++){
+		for(i=0;i<count;i++){
 			char text;
 			if(files[i]!=NULL){
-	      while((text = fgetc(files[i]))!=EOF)
-                printf("%c",text);
-        				fclose(files[i]);
-				}
+				while((text = fgetc(files[i]))!=EOF)
+					printf("%c",text);
+				fclose(files[i]);
 			}
 		}
+	}
 	return 0;
 }
 void bsh_create(char **command){
@@ -76,7 +76,7 @@ void bsh_create(char **command){
 }
 void bsh_systemrun(char **command){
 	int i=1, count=0;
-  char *string = malloc(SYS*sizeof(char));
+	char *string = malloc(SYS*sizeof(char));
 	while(command[i]!=NULL){
 		count++;
 		i++;
@@ -84,7 +84,8 @@ void bsh_systemrun(char **command){
 	strcpy(string,command[0]);
 	for(i=1;i<=count; i++){
 		strcat(string," ");
-    strcat(string,command[i]);
+		strcat(string,command[i]);
 	}
-  system(string);
+	system(string);
+	free(string);
 }

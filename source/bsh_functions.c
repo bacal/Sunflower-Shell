@@ -22,10 +22,10 @@ char* bsh_getuserinfo(){
 	char *name;
 	char *home = malloc(40*sizeof(char));
 	char *userinfo=malloc(60*sizeof(char));
-	char *hostname=malloc(HOSTSIZE*sizeof(char));//allocates hostsize characters to hostname array
-	char *cwd = malloc(40*sizeof(char)); //allocates 40 bytes to the
+	char *hostname=malloc(HOSTSIZE+80*sizeof(char));//allocates hostsize characters to hostname array
+	char *cwd = malloc(HOSTSIZE*sizeof(char)); //allocates 40 bytes to the
 	if ((p = getpwuid(getuid())) != NULL)
-			 name = p->pw_name;
+		name = p->pw_name;
 	gethostname(hostname,HOSTSIZE);//gets hostname
 	getcwd(cwd,4000);
 	strcpy(home,"/home/");
@@ -57,16 +57,16 @@ int bsh_process(char **args){
 	}
 	for(i=0; i< BSH_PREDEFS; i++){
 		if(strcmp(args[0],predefined[i])==0){
-				bsh_execute(args); // executes the predefined arguement if it exists
-				bsh_ran=true;
-			}
+			bsh_execute(args); // executes the predefined arguement if it exists
+			bsh_ran=true;
+		}
 		else if (strcmp(args[0],"logoff")==0)
 			return 0;
-		}
+	}
 
-		if(bsh_ran == false){
-			bsh_systemrun(args);
-		}
+	if(bsh_ran == false){
+		bsh_systemrun(args);
+	}
 	return 1;
 }
 
@@ -85,15 +85,15 @@ void bsh_execute(char **args){
 char** bsh_split(char *str){
 	int i =0;
 
-	char delim[] = " \t\r\t\n\v";
+	char delim[] = " \t\r\n\v";
 	char **bsplt = malloc(10*BUFFERSIZE*sizeof(char));
 	if(strcmp(str," ")){
 		bsplt[0] = NULL;
 	}
 	bsplt[i] = strtok(str,delim);
 	while(bsplt[i]!=NULL){
-			i++;
-			bsplt[i] = strtok(NULL,delim);
+		i++;
+		bsplt[i] = strtok(NULL,delim);
 
 	}
 	return bsplt;
