@@ -4,30 +4,31 @@
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <linux/limits.h>
 #define HOSTSIZE 1024
-#define BSH_PREDEFS 4
+#define BSH_PREDEFS 3
 #define BUFFERSIZE 256
 #define BUFFER 64
 void bsh_execute(char**);
 void bsh_systemrun(char**);
 void bsh_create(char**);//create new files with the name inputted by the user
 void bsh_cd(char**);//changes the directory
-void bsh_clear();//clears screen
 int bsh_cat(char**);//prints out the contents of a file
 
-char *predefined[]={"cd","clear","cat","create"};
+char *predefined[]={"cd","cat","create"};
 
 char* bsh_getuserinfo(){
 	struct passwd *p;
-	char *name;
-	char *home = malloc(40*sizeof(char));
-	char *userinfo=malloc(60*sizeof(char));
-	char *hostname=malloc(HOSTSIZE+80*sizeof(char));//allocates hostsize characters to hostname array
-	char *cwd = malloc(HOSTSIZE*sizeof(char)); //allocates 40 bytes to the
+	char *name = calloc(40,sizeof(char));
+	char *home = calloc(40,sizeof(char));
+	char *userinfo=calloc(60,sizeof(char));
+	char *hostname=calloc(HOSTSIZE,sizeof(char));//allocates hostsize characters to hostname array
+	char *cwd = calloc(PATH_MAX,sizeof(char)); //allocates PATH_MAX bytes to the cwd array
+	*name = '\0';
 	if ((p = getpwuid(getuid())) != NULL)
-		name = p->pw_name;
+		strcpy(name,p->pw_name);
 	gethostname(hostname,HOSTSIZE);//gets hostname
-	getcwd(cwd,4000);
+	cwd = getcwd(cwd,4000);
 	strcpy(home,"/home/");
 	strcat(home,name);
 	if(strcmp(cwd,home)==0)
@@ -45,7 +46,10 @@ char* bsh_getuserinfo(){
 char* bsh_getline(){
 	char *args =NULL;
 	size_t size =0;
-	getline(&args,&size,stdin); //gets a line from standard input
+	if(getline(&args,&size,stdin)<0){ //gets a line from standard input
+		printf("bsh: getline failure, exiting...\n");
+		exit(0);
+	}
 	return args;
 }
 
@@ -73,8 +77,6 @@ int bsh_process(char **args){
 void bsh_execute(char **args){
 	if(strcmp(args[0],"cd")==0)
 		bsh_cd(args);
-	else if (strcmp(args[0],"clear")==0)
-		bsh_clear();
 	else if (strcmp(args[0],"cat")==0)
 		bsh_cat(args);
 	else if (strcmp(args[0],"create")==0)
@@ -83,7 +85,7 @@ void bsh_execute(char **args){
 
 
 char** bsh_split(char *str){
-	int i =0;
+	int i =0,size=0;
 
 	char delim[] = " \t\r\n\v";
 	char **bsplt = malloc(10*BUFFERSIZE*sizeof(char));
@@ -94,7 +96,11 @@ char** bsh_split(char *str){
 	while(bsplt[i]!=NULL){
 		i++;
 		bsplt[i] = strtok(NULL,delim);
-
+	}
+	while(bsplt[i]!=NULL){
+		size = sizeof(bsplt[i]);
+		bsplt[i][size]='\0';
+		i++;
 	}
 	return bsplt;
 }

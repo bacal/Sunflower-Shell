@@ -3,33 +3,36 @@
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <sys/wait.h>
+#define SYS 512
 
-#define SYS 200
-void bsh_cd(char **dir){
+void bsh_cd(char **dire){
 	struct passwd *p;
 	char *name;
+	//printf("%s",dire[0]);
 	char *home = malloc(40*sizeof(char));
 	if ((p = getpwuid(getuid())) != NULL)
 		name = p->pw_name;
 	strcpy(home,"/home/");
 	strcat(home,name);
-	if(dir[1]!=NULL){
-		if(strcmp(dir[1],"~")==0){
-			chdir(home);
-
+	if(dire[1]!=NULL){
+		if(strcmp(dire[1],"~")==0){
+			if(chdir(home)==0);
 		}
+		else if(strcmp(dire[1]," ")==0){
+			if(chdir(home)==0);
+		}
+
 		else
-			chdir(dir[1]);
+			if(chdir(dire[1])!=0)
+			printf("bsh: cd: %s: Error, no such directory\n",dire[1]);
 	}
 	else{
-		chdir(home);
+		if(chdir(home)==0);
 	}
 	free(home);
 }
 
-void bsh_clear(){
-	system("clear");
-}
 int bsh_cat(char **command){
 	int i=1,count=0, opened = 0;
 	if(command[1]==NULL){
@@ -75,17 +78,12 @@ void bsh_create(char **command){
 	}
 }
 void bsh_systemrun(char **command){
-	int i=1, count=0;
-	char *string = malloc(SYS*sizeof(char));
-	while(command[i]!=NULL){
-		count++;
-		i++;
+	int pid = fork();
+	if(pid==0){
+		if(execvp(command[0],command)<0){
+			printf("bsh: %s: command not found\n",command[0]);
+			exit(0);
+		}
 	}
-	strcpy(string,command[0]);
-	for(i=1;i<=count; i++){
-		strcat(string," ");
-		strcat(string,command[i]);
-	}
-	system(string);
-	free(string);
+	wait(NULL);
 }
