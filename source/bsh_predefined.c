@@ -10,7 +10,7 @@ void bsh_cd(char **dire){
 	struct passwd *p;
 	char *name;
 	//printf("%s",dire[0]);
-	char *home = malloc(40*sizeof(char));
+	char *home = calloc(40,sizeof(char));
 	if ((p = getpwuid(getuid())) != NULL)
 		name = p->pw_name;
 	strcpy(home,"/home/");
@@ -45,7 +45,7 @@ int bsh_cat(char **command){
 	}
 
 
-	FILE** files = malloc(count*sizeof(FILE));
+	FILE** files = calloc(count,sizeof(FILE));
 	for(i=0;i<count;i++){
 
 		files[i] = fopen(command[i+1],"r");

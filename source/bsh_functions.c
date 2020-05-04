@@ -4,11 +4,11 @@
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
-#include <linux/limits.h>
 #define HOSTSIZE 1024
 #define BSH_PREDEFS 3
 #define BUFFERSIZE 256
 #define BUFFER 64
+#define PATH_MAX 4096
 void bsh_execute(char**);
 void bsh_systemrun(char**);
 void bsh_create(char**);//create new files with the name inputted by the user
@@ -88,7 +88,7 @@ char** bsh_split(char *str){
 	int i =0,size=0;
 
 	char delim[] = " \t\r\n\v";
-	char **bsplt = malloc(10*BUFFERSIZE*sizeof(char));
+	char **bsplt = calloc(10*BUFFERSIZE,sizeof(char));
 	if(strcmp(str," ")){
 		bsplt[0] = NULL;
 	}
