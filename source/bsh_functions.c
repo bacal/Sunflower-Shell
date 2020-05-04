@@ -64,7 +64,7 @@ int bsh_process(char **args){
 			bsh_execute(args); // executes the predefined arguement if it exists
 			bsh_ran=true;
 		}
-		else if (strcmp(args[0],"logoff")==0)
+		else if (strcmp(args[0],"exit")==0)
 			return 0;
 	}
 
