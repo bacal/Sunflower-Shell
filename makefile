@@ -4,14 +4,14 @@ NAME=bsh
 TARGET=./bin/
 SOURCE=./source/
 SYS=/bin/
-FLAGS=-O2 -Wall -lm -pedantic -o
+FLAGS=-Wall -lm -pedantic -o
 
 bsh: bsh.o bsh_predefined.o bsh_functions.o
 	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_predefined.o $(TARGET)$(NAME)_functions.o $(FLAGS) $(NAME)
 
 
 bsh.o: $(SOURCE)bsh.c
-	mkdir bin
+	 if [ ! -d $(TARGET) ]; then mkdir bin; fi
 	$(CC) -c $(SOURCE)bsh.c $(FLAGS) $(TARGET)bsh.o
 bsh_predefined.o: $(SOURCE)bsh_predefined.c
 	$(CC) -c $(SOURCE)bsh_predefined.c $(FLAGS) $(TARGET)bsh_predefined.o
