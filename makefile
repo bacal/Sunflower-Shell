@@ -11,6 +11,7 @@ bsh: bsh.o bsh_predefined.o bsh_functions.o
 
 
 bsh.o: $(SOURCE)bsh.c
+	mkdir bin
 	$(CC) -c $(SOURCE)bsh.c $(FLAGS) $(TARGET)bsh.o
 bsh_predefined.o: $(SOURCE)bsh_predefined.c
 	$(CC) -c $(SOURCE)bsh_predefined.c $(FLAGS) $(TARGET)bsh_predefined.o
@@ -22,4 +23,4 @@ uninstall:
 	rm $(SYS)$(NAME)
 clean:
 	rm $(NAME)
-	rm $(TARGET)*
+	rm -rf $(TARGET)
