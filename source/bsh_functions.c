@@ -19,27 +19,42 @@ char *predefined[]={"cd","cat","create"};
 
 char* bsh_getuserinfo(){
 	struct passwd *p;
+	int i=0;
 	char *name = calloc(40,sizeof(char));
-	char *home = calloc(40,sizeof(char));
 	char *userinfo=calloc(60,sizeof(char));
 	char *hostname=calloc(HOSTSIZE,sizeof(char));//allocates hostsize characters to hostname array
 	char *cwd = calloc(PATH_MAX,sizeof(char)); //allocates PATH_MAX bytes to the cwd array
 	*name = '\0';
-	if ((p = getpwuid(getuid())) != NULL)
+
+	if ((p = getpwuid(getuid())) != NULL){ //getpwuid returns a pointer to a struct passwd
 		strcpy(name,p->pw_name);
+	}
+
 	gethostname(hostname,HOSTSIZE);//gets hostname
-	cwd = getcwd(cwd,4000);
-	strcpy(home,"/home/");
-	strcat(home,name);
-	if(strcmp(cwd,home)==0)
-		strcpy(cwd,"~");
-	//bsh_disphome(cwd);
+	strcpy(cwd,getcwd(cwd,PATH_MAX));//copies the string getcwd to cwd
+
+	char **wd_split = calloc(PATH_MAX,sizeof(char));
+	char delim[] = "/";
+	wd_split[i] = strtok(cwd,delim);
+	while(wd_split[i]!=NULL){
+		i++;
+ 		wd_split[i] = strtok(NULL,delim);
+ 	}
+	if(i>1){
+		if(!strcmp(wd_split[0],"home")&& !strcmp(wd_split[1],name)){
+			strcpy(cwd,"~");
+		}
+		for(int j=2; j<i;j++){
+			strcat(cwd,"/");
+			strcat(cwd,wd_split[j]);
+		}
+	}
 
 	sprintf(userinfo,"[%s@%s]:%s$ ",name,hostname,cwd);
 	free(name);
-	free(home);
 	free(hostname);
 	free(cwd);
+	free(wd_split);
 	return userinfo;
 }
 
@@ -47,7 +62,7 @@ char* bsh_getline(){
 	char *args =NULL;
 	size_t size =0;
 	if(getline(&args,&size,stdin)<0){ //gets a line from standard input
-		printf("bsh: getline failure, exiting...\n");
+		printf("exit\n");
 		exit(0);
 	}
 	return args;
@@ -88,7 +103,7 @@ char** bsh_split(char *str){
 	int i =0,size=0;
 
 	char delim[] = " \t\r\n\v";
-	char **bsplt = calloc(10*BUFFERSIZE,sizeof(char));
+	char **bsplt = calloc(PATH_MAX,sizeof(char));
 	if(strcmp(str," ")){
 		bsplt[0] = NULL;
 	}

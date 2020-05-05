@@ -86,4 +86,5 @@ void bsh_systemrun(char **command){
 		}
 	}
 	wait(NULL);
+	free(command);
 }
