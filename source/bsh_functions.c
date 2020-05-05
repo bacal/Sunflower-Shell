@@ -59,43 +59,43 @@ char* bsh_getuserinfo(){
 }
 
 char* bsh_getline(){
-	char *args =NULL;
+	char *command =NULL;
 	size_t size =0;
-	if(getline(&args,&size,stdin)<0){ //gets a line from standard input
+	if(getline(&command,&size,stdin)<0){ //gets a line from standard input
 		printf("exit\n");
 		exit(0);
 	}
-	return args;
+	return command;
 }
 
-int bsh_process(char **args){
+int bsh_process(char **command){
 	int i=0;
 	bool bsh_ran=false;
-	if(args[0]==NULL){
+	if(command[0]==NULL){
 		return 1;
 	}
 	for(i=0; i< BSH_PREDEFS; i++){
-		if(strcmp(args[0],predefined[i])==0){
-			bsh_execute(args); // executes the predefined arguement if it exists
+		if(strcmp(command[0],predefined[i])==0){
+			bsh_execute(command); // executes the predefined arguement if it exists
 			bsh_ran=true;
 		}
-		else if (strcmp(args[0],"exit")==0)
+		else if (strcmp(command[0],"exit")==0)
 			return 0;
 	}
 
 	if(bsh_ran == false){
-		bsh_systemrun(args);
+		bsh_systemrun(command);
 	}
 	return 1;
 }
 
-void bsh_execute(char **args){
-	if(strcmp(args[0],"cd")==0)
-		bsh_cd(args);
-	else if (strcmp(args[0],"cat")==0)
-		bsh_cat(args);
-	else if (strcmp(args[0],"create")==0)
-		bsh_create(args);
+void bsh_execute(char **command){
+	if(strcmp(command[0],"cd")==0)
+		bsh_cd(command);
+	else if (strcmp(command[0],"cat")==0)
+		bsh_cat(command);
+	else if (strcmp(command[0],"create")==0)
+		bsh_create(command);
 }
 
 

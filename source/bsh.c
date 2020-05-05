@@ -16,16 +16,16 @@ int main(int argc, const char **argv){
 
 void bsh_loop(){
 	int condition=1;
-	char *args;
+	char *command;
 	char **bsplt;
 
 	while(condition){
 		char *userinfo = bsh_getuserinfo();
 		printf("%s",userinfo);
-		args = bsh_getline();
-		bsplt = bsh_split(args);
+		command = bsh_getline();
+		bsplt = bsh_split(command);
 		condition = bsh_process(bsplt);
-		free(args);
+		free(command);
 		free(bsplt);
 		free(userinfo);
 	}
