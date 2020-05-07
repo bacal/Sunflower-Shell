@@ -11,9 +11,12 @@ void bsh_cd(char **dire){
 	char *name;
 	//printf("%s",dire[0]);
 	char *home = calloc(40,sizeof(char));
+	*home = '\0';
+
 	if ((p = getpwuid(getuid())) != NULL)
 		name = p->pw_name;
-	strcpy(home,"/home/");
+
+	strcat(home,"/home/");
 	strcat(home,name);
 	if(dire[1]!=NULL){
 		if(strcmp(dire[1],"~")==0){

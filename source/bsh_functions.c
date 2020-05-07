@@ -24,17 +24,22 @@ char* bsh_getuserinfo(){
 	char *userinfo=calloc(60,sizeof(char));
 	char *hostname=calloc(HOSTSIZE,sizeof(char));//allocates hostsize characters to hostname array
 	char *cwd = calloc(PATH_MAX,sizeof(char)); //allocates PATH_MAX bytes to the cwd array
+	char **wd_split = calloc(PATH_MAX,sizeof(char));
+	char delim[] = "/";
+
 	*name = '\0';
+	*cwd = '\0';
+	*hostname = '\0';
+	*userinfo = '\0';
 
 	if ((p = getpwuid(getuid())) != NULL){ //getpwuid returns a pointer to a struct passwd
 		strcpy(name,p->pw_name);
 	}
 
 	gethostname(hostname,HOSTSIZE);//gets hostname
-	strcpy(cwd,getcwd(cwd,PATH_MAX));//copies the string getcwd to cwd
+	getcwd(cwd,PATH_MAX);//copies the string getcwd to cwd
 
-	char **wd_split = calloc(PATH_MAX,sizeof(char));
-	char delim[] = "/";
+
 	wd_split[i] = strtok(cwd,delim);
 	while(wd_split[i]!=NULL){
 		i++;
@@ -63,7 +68,7 @@ char* bsh_getline(){
 	size_t size =0;
 	if(getline(&command,&size,stdin)<0){ //gets a line from standard input
 		printf("exit\n");
-		exit(0);
+		command = NULL;
 	}
 	return command;
 }
@@ -72,7 +77,7 @@ int bsh_process(char **command){
 	int i=0;
 	bool bsh_ran=false;
 	if(command[0]==NULL){
-		return 1;
+		return 0;
 	}
 	for(i=0; i< BSH_PREDEFS; i++){
 		if(strcmp(command[0],predefined[i])==0){
@@ -101,11 +106,11 @@ void bsh_execute(char **command){
 
 char** bsh_split(char *str){
 	int i =0,size=0;
-
 	char delim[] = " \t\r\n\v";
 	char **bsplt = calloc(PATH_MAX,sizeof(char));
-	if(strcmp(str," ")){
+	if(str==NULL || !strcmp(str," ")){
 		bsplt[0] = NULL;
+		return bsplt;
 	}
 	bsplt[i] = strtok(str,delim);
 	while(bsplt[i]!=NULL){
