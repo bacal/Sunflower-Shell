@@ -6,7 +6,7 @@ SOURCE=./source/
 SYS=/bin/
 FLAGS=-Wall -lm -pedantic -o
 
-bsh: bsh.o bsh_predefined.o bsh_functions.o
+all: bsh.o bsh_predefined.o bsh_functions.o
 	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_predefined.o $(TARGET)$(NAME)_functions.o $(FLAGS) $(NAME)
 
 

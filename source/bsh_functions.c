@@ -43,8 +43,8 @@ char* bsh_getuserinfo(){
 	wd_split[i] = strtok(cwd,delim);
 	while(wd_split[i]!=NULL){
 		i++;
- 		wd_split[i] = strtok(NULL,delim);
- 	}
+		wd_split[i] = strtok(NULL,delim);
+	}
 	if(i>1){
 		if(!strcmp(wd_split[0],"home")&& !strcmp(wd_split[1],name)){
 			strcpy(cwd,"~");
@@ -67,8 +67,11 @@ char* bsh_getline(){
 	char *command =NULL;
 	size_t size =0;
 	if(getline(&command,&size,stdin)<0){ //gets a line from standard input
+		free(command);
+		command = calloc(6,sizeof(char));
+		command[0] = '\0';
 		printf("exit\n");
-		command = NULL;
+		strcat(command,"exit");
 	}
 	return command;
 }
@@ -77,14 +80,14 @@ int bsh_process(char **command){
 	int i=0;
 	bool bsh_ran=false;
 	if(command[0]==NULL){
-		return 0;
+		return 1;
 	}
 	for(i=0; i< BSH_PREDEFS; i++){
 		if(strcmp(command[0],predefined[i])==0){
 			bsh_execute(command); // executes the predefined arguement if it exists
 			bsh_ran=true;
 		}
-		else if (strcmp(command[0],"exit")==0)
+		else if (!strcmp(command[0],"exit"))
 			return 0;
 	}
 
@@ -108,10 +111,11 @@ char** bsh_split(char *str){
 	int i =0,size=0;
 	char delim[] = " \t\r\n\v";
 	char **bsplt = calloc(PATH_MAX,sizeof(char));
-	if(str==NULL || !strcmp(str," ")){
+	if((str==NULL) || !strcmp(str," ")){
 		bsplt[0] = NULL;
 		return bsplt;
 	}
+
 	bsplt[i] = strtok(str,delim);
 	while(bsplt[i]!=NULL){
 		i++;
