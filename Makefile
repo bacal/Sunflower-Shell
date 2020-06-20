@@ -2,16 +2,15 @@
 CC=gcc
 NAME=bsh
 TARGET=./bin/
-SOURCE=./source/
+SOURCE=./src/
 SYS=/bin/
-FLAGS=-Wall -lm -pedantic -o
+FLAGS=-Wall -lm -pedantic -lreadline -o
 
 all: bsh.o bsh_predefined.o bsh_functions.o
 	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_predefined.o $(TARGET)$(NAME)_functions.o $(FLAGS) $(NAME)
 
 
 bsh.o: $(SOURCE)bsh.c
-	 if [ ! -d $(TARGET) ]; then mkdir bin; fi
 	$(CC) -c $(SOURCE)bsh.c $(FLAGS) $(TARGET)bsh.o
 bsh_predefined.o: $(SOURCE)bsh_predefined.c
 	$(CC) -c $(SOURCE)bsh_predefined.c $(FLAGS) $(TARGET)bsh_predefined.o
@@ -23,4 +22,4 @@ uninstall:
 	rm $(SYS)$(NAME)
 clean:
 	rm $(NAME)
-	rm -rf $(TARGET)
+	rm -rf $(TARGET)*

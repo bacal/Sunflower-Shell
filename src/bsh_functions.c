@@ -4,16 +4,17 @@
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include "bsh.h"
+
 #define HOSTSIZE 1024
 #define BSH_PREDEFS 3
 #define BUFFERSIZE 256
 #define BUFFER 64
 #define PATH_MAX 4096
-void bsh_execute(char**);
-void bsh_systemrun(char**);
-void bsh_create(char**);//create new files with the name inputted by the user
-void bsh_cd(char**);//changes the directory
-int bsh_cat(char**);//prints out the contents of a file
+
+typedef int cbsh ();
 
 char *predefined[]={"cd","cat","create"};
 
@@ -63,18 +64,14 @@ char* bsh_getuserinfo(){
 	return userinfo;
 }
 
-char* bsh_getline(){
-	char *command =NULL;
-	size_t size =0;
-	if(getline(&command,&size,stdin)<0){ //gets a line from standard input
-		free(command);
-		command = calloc(6,sizeof(char));
-		command[0] = '\0';
-		printf("exit\n");
-		strcat(command,"exit");
-	}
+char* bsh_getline(char *userinfo){
+	char *command = readline(userinfo);
+
+	add_history(command);
+	append_history(strlen(command),"~/.bsh_history");	
 	return command;
 }
+
 
 int bsh_process(char **command){
 	int i=0;
