@@ -8,6 +8,6 @@ void bsh_systemrun(char**);
 void bsh_create(char**);//create new files with the name inputted by the user
 void bsh_cd(char**);//changes the directory
 int bsh_cat(char**);//prints out the contents of a file
-
+void bsh_sigHandler(int);
 
 

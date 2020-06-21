@@ -6,6 +6,7 @@
 #include <pwd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <signal.h>
 #include "bsh.h"
 
 #define HOSTSIZE 1024
@@ -14,7 +15,13 @@
 #define BUFFER 64
 #define PATH_MAX 4096
 
-typedef int cbsh ();
+void bsh_sigHandler(int sig_num){
+	if(sig_num == SIGINT){
+		signal(SIGINT,bsh_sigHandler);
+	}
+
+}
+
 
 char *predefined[]={"cd","cat","create"};
 
@@ -65,10 +72,13 @@ char* bsh_getuserinfo(){
 }
 
 char* bsh_getline(char *userinfo){
+	
 	char *command = readline(userinfo);
-
-	add_history(command);
-	append_history(strlen(command),"~/.bsh_history");	
+	
+	if(command!=NULL){
+		add_history(command);
+		append_history(strlen(command),"~/.bsh_history");	
+	}
 	return command;
 }
 
@@ -76,6 +86,7 @@ char* bsh_getline(char *userinfo){
 int bsh_process(char **command){
 	int i=0;
 	bool bsh_ran=false;
+	
 	if(command[0]==NULL){
 		return 1;
 	}
@@ -108,10 +119,16 @@ char** bsh_split(char *str){
 	int i =0,size=0;
 	char delim[] = " \t\r\n\v";
 	char **bsplt = calloc(PATH_MAX,sizeof(char));
-	if((str==NULL) || !strcmp(str," ")){
+
+	if(str==NULL){
+		printf("exit\n");
+		exit(0);
+	}
+	if(!strcmp(str," ")){
 		bsplt[0] = NULL;
 		return bsplt;
 	}
+	
 
 	bsplt[i] = strtok(str,delim);
 	while(bsplt[i]!=NULL){
