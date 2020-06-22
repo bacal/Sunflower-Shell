@@ -4,7 +4,7 @@ NAME=bsh
 TARGET=bin/
 SOURCE=./src/
 SYS=/bin/
-FLAGS=-O0 -Wall -lm -pedantic -lreadline -o
+FLAGS=-O2 -Wall -lm -pedantic -lreadline -o
 
 all: bsh.o bsh_predefined.o bsh_functions.o
 	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_predefined.o $(TARGET)$(NAME)_functions.o $(FLAGS) $(NAME)

@@ -15,12 +15,7 @@
 #define BUFFER 64
 #define PATH_MAX 4096
 
-void bsh_sigHandler(int sig_num){
-	if(sig_num == SIGINT){
-		signal(SIGINT,bsh_sigHandler);
-	}
 
-}
 
 
 char *predefined[]={"cd","cat","create"};
