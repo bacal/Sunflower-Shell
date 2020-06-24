@@ -67,12 +67,12 @@ char* bsh_getuserinfo(){
 }
 
 char* bsh_getline(char *userinfo){
-	
+
 	char *command = readline(userinfo);
-	
+
 	if(command!=NULL){
 		add_history(command);
-		append_history(strlen(command),"~/.bsh_history");	
+		append_history(strlen(command),"~/.bsh_history");
 	}
 	return command;
 }
@@ -81,13 +81,13 @@ char* bsh_getline(char *userinfo){
 int bsh_process(char **command){
 	int i=0;
 	bool bsh_ran=false;
-	
+
 	if(command[0]==NULL){
 		return 1;
 	}
 	for(i=0; i< BSH_PREDEFS; i++){
 		if(strcmp(command[0],predefined[i])==0){
-			bsh_execute(command); // executes the predefined arguement if it exists
+			bsh_built_in_execute(command); // executes the predefined arguement if it exists
 			bsh_ran=true;
 		}
 		else if (!strcmp(command[0],"exit"))
@@ -100,7 +100,7 @@ int bsh_process(char **command){
 	return 1;
 }
 
-void bsh_execute(char **command){
+void bsh_built_in_execute(char **command){
 	if(strcmp(command[0],"cd")==0)
 		bsh_cd(command);
 	else if (strcmp(command[0],"cat")==0)
@@ -123,7 +123,7 @@ char** bsh_split(char *str){
 		bsplt[0] = NULL;
 		return bsplt;
 	}
-	
+
 
 	bsplt[i] = strtok(str,delim);
 	while(bsplt[i]!=NULL){

@@ -17,7 +17,6 @@ void bsh_loop(){
 	int condition=1;
 	char *command;
 	char **bsplt;
-	start:
 	while(condition){
 		signal(SIGINT,bsh_sigHandler);
 		char *userinfo = bsh_getuserinfo();
@@ -33,14 +32,14 @@ void bsh_loop(){
 		free(bsplt);
 		free(userinfo);
 	}
-	
+
 }
 void bsh_sigHandler(int sig_num){
 	if(sig_num == SIGINT){
 		signal(SIGINT,bsh_sigHandler);
 		restart = 1;
 		printf("\n%s",bsh_getuserinfo());
-		rl_clear_history();	
+		rl_clear_history();
 	}
 
 }
