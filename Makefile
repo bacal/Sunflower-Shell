@@ -4,23 +4,29 @@ NAME=bsh
 TARGET=bin/
 SOURCE=./src/
 SYS=/bin/
+CMDLIBS=$(TARGET)cat.o $(TARGET)cd.o
+CMDIR = src/commands/
 FLAGS=-O2 -Wall -lm -pedantic -lreadline -o
 
-all: bsh.o bsh_predefined.o bsh_functions.o
-	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_predefined.o $(TARGET)$(NAME)_functions.o $(FLAGS) $(NAME)
+all: bsh.o bsh_functions.o
+	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_functions.o $(CMDLIBS)  $(FLAGS) $(NAME)
 
 
-bsh.o: $(SOURCE)bsh.c
+bsh.o: $(SOURCE)bsh.c 
 	if [ ! -d $(TARGET) ]; then mkdir bin; fi
 	$(CC) -c $(SOURCE)bsh.c $(FLAGS) $(TARGET)bsh.o
-bsh_predefined.o: $(SOURCE)bsh_predefined.c
-	$(CC) -c $(SOURCE)bsh_predefined.c $(FLAGS) $(TARGET)bsh_predefined.o
-bsh_functions.o:	$(SOURCE)bsh_functions.c
+
+bsh_functions.o: $(SOURCE)bsh_functions.c commands
 	$(CC) -c $(SOURCE)bsh_functions.c $(FLAGS) $(TARGET)bsh_functions.o
+
+commands:
+	$(CC) -c $(CMDIR)cat.c -o $(TARGET)cat.o
+	$(CC) -c $(CMDIR)cd.c -o $(TARGET)cd.o
+
 install:
 	cp -r $(NAME) $(SYS)
 uninstall:
 	rm $(SYS)$(NAME)
 clean:
 	rm $(NAME)
-	rm -rf $(TARGET)*
+	rm -r $(TARGET)*

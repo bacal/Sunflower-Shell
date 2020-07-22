@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h>
@@ -19,6 +20,27 @@
 
 
 char *predefined[]={"cd","cat","create"};
+
+void bsh_create(char **command){
+	int i=1;
+	while(command[i]!=NULL){
+		FILE* fp = fopen(command[i],"w+");
+		fprintf(fp," ");
+		fclose(fp);
+		i++;
+	}
+}
+
+void bsh_systemrun(char **command){
+	int pid = fork();
+	if(pid==0){
+		if(execvp(command[0],command)<0){
+			printf("bsh: %s: command not found\n",command[0]);
+			exit(0);
+		}
+	}
+	wait(NULL);
+}
 
 char* bsh_getuserinfo(){
 	struct passwd *p;
@@ -40,7 +62,9 @@ char* bsh_getuserinfo(){
 	}
 
 	gethostname(hostname,HOSTSIZE);//gets hostname
-	getcwd(cwd,PATH_MAX);//copies the string getcwd to cwd
+	if(getcwd(cwd,PATH_MAX)==NULL){
+		strcat(" ",cwd);
+	}
 
 
 	wd_split[i] = strtok(cwd,delim);
