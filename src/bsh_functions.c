@@ -90,6 +90,8 @@ char* bsh_getuserinfo(){
 	return userinfo;
 }
 
+
+#ifdef READLINE 
 char* bsh_getline(char *userinfo){
 
 	char *command = readline(userinfo);
@@ -100,8 +102,23 @@ char* bsh_getline(char *userinfo){
 	}
 	return command;
 }
+#endif
 
-
+#ifndef READLINE
+char* bsh_getline(char* userinfo){
+	char *command =NULL;
+	size_t size =0;
+	printf("%s",userinfo);
+	if(getline(&command,&size,stdin)<0){ //gets a line from standard input
+		free(command);
+		command = calloc(6,sizeof(char));
+		command[0] = '\0';
+		printf("exit\n");
+		strcat(command,"exit");
+	}
+	return command;
+}
+#endif
 int bsh_process(char **command){
 	int i=0;
 	bool bsh_ran=false;

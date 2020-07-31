@@ -9,8 +9,13 @@ CMDIR = src/commands/
 FLAGS=-O2 -Wall -lm -pedantic -lreadline -o
 
 all: bsh.o bsh_functions.o
-	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_functions.o $(CMDLIBS)  $(FLAGS) $(NAME)
+	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_functions.o $(CMDLIBS)   $(FLAGS)  $(NAME)
 
+readline: readline_lib bsh.o
+	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_functions.o $(CMDLIBS)   $(FLAGS)  $(NAME)
+
+readline_lib: $(SOURCE)bsh_functions.c commands
+	$(CC) -c -D READLINE $(SOURCE)$(NAME)_functions.c $(FLAGS) $(TARGET)bsh_functions.o
 
 bsh.o: $(SOURCE)bsh.c 
 	if [ ! -d $(TARGET) ]; then mkdir bin; fi
