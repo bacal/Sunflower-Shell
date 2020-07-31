@@ -3,13 +3,14 @@ CC=gcc
 NAME=bsh
 TARGET=bin/
 SOURCE=./src/
-SYS=/bin/
+SYS=usr/bin/
 CMDLIBS=$(TARGET)cat.o $(TARGET)cd.o
 CMDIR = src/commands/
 FLAGS=-O2 -Wall -lm -pedantic -lreadline -o
 
 all: bsh.o bsh_functions.o
-	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_functions.o $(CMDLIBS)   $(FLAGS)  $(NAME)
+	if [ ! -d $(SYS) ]; then mkdir usr/ mkdir $(SYS); fi
+	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_functions.o $(CMDLIBS)   $(FLAGS)  $(SYS)$(NAME)
 
 readline: readline_lib bsh.o
 	$(CC) $(TARGET)$(NAME).o $(TARGET)$(NAME)_functions.o $(CMDLIBS)   $(FLAGS)  $(NAME)
@@ -29,6 +30,7 @@ commands:
 	$(CC) -c $(CMDIR)cd.c -o $(TARGET)cd.o
 
 install:
+	if [ ! -d $(SYS) ]; then mkdir $(SYS); fi
 	cp -r $(NAME) $(SYS)
 uninstall:
 	rm $(SYS)$(NAME)
