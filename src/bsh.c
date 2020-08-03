@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#ifdef READLINE
 #include <readline/readline.h>
+#endif
 #include "bsh.h"
 int restart = 0;
 
@@ -39,7 +41,9 @@ void bsh_sigHandler(int sig_num){
 		signal(SIGINT,bsh_sigHandler);
 		restart = 1;
 		printf("\n%s",bsh_getuserinfo());
+		#ifdef READLINE
 		rl_clear_history();
+		#endif
 	}
 
 }
