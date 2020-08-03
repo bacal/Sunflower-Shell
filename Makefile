@@ -5,7 +5,7 @@ LIBS=lib/
 SOURCE=./src/
 SYS=usr/bin/
 CMDLIBS=$(LIBS)cat.o $(LIBS)cd.o
-CMDIR = src/commands/
+CMDIR = commands/
 FLAGS=-O2 -Wall -lm -pedantic -lreadline -o
 
 all: bsh.o bsh_functions.o
@@ -15,17 +15,17 @@ all: bsh.o bsh_functions.o
 readline: readline_lib bsh.o
 	$(CC) $(LIBS)$(NAME).o $(LIBS)$(NAME)_functions.o $(CMDLIBS)   $(FLAGS)  $(SYS)$(NAME)
 
-readline_lib: $(SOURCE)bsh_functions.c commands
+readline_lib: $(SOURCE)bsh_functions.c builtin
 	$(CC) -c -D READLINE $(SOURCE)$(NAME)_functions.c $(FLAGS) $(LIBS)bsh_functions.o
 
 bsh.o: $(SOURCE)bsh.c 
 	if [ ! -d $(LIBS) ]; then mkdir $(LIBS); fi
 	$(CC) -c $(SOURCE)bsh.c $(FLAGS) $(LIBS)bsh.o
 
-bsh_functions.o: $(SOURCE)bsh_functions.c commands
+bsh_functions.o: $(SOURCE)bsh_functions.c builtin
 	$(CC) -c $(SOURCE)bsh_functions.c $(FLAGS) $(LIBS)bsh_functions.o
 
-commands:
+builtin:
 	$(CC) -c $(CMDIR)cat.c -o $(LIBS)cat.o
 	$(CC) -c $(CMDIR)cd.c -o $(LIBS)cd.o
 

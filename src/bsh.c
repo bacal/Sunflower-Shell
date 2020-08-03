@@ -19,16 +19,12 @@ void bsh_loop(){
 	int condition=1;
 	char *command;
 	char **bsplt;
+
 	while(condition){
 		signal(SIGINT,bsh_sigHandler);
 		char *userinfo = bsh_getuserinfo();
-		command = bsh_getline(userinfo);
+		command = bsh_getline(userinfo);	
 		bsplt = bsh_split(command);
-		if(restart==1){
-			bsplt[0]=NULL;
-			bsh_process(bsplt);
-			restart=0;
-		}
 		condition = bsh_process(bsplt);
 		free(command);
 		free(bsplt);
@@ -39,11 +35,9 @@ void bsh_loop(){
 void bsh_sigHandler(int sig_num){
 	if(sig_num == SIGINT){
 		signal(SIGINT,bsh_sigHandler);
-		restart = 1;
-		printf("\n%s",bsh_getuserinfo());
-		#ifdef READLINE
+#ifdef READLINE
 		rl_clear_history();
-		#endif
+#endif
 	}
 
 }
