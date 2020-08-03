@@ -30,7 +30,7 @@ commands:
 	$(CC) -c $(CMDIR)cd.c -o $(LIBS)cd.o
 
 install:
-	cp -r $(NAME) /$(SYS)
+	cp -r $(SYS)$(NAME) /$(SYS)
 uninstall:
 	rm $(SYS)$(NAME)
 clean:
