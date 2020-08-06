@@ -1,4 +1,4 @@
-# B-Shell
+# Sunflower Shell
 A simple shell written in C
 
 Current built in commands are  
