@@ -4,7 +4,7 @@
 #ifdef READLINE
 #include <readline/readline.h>
 #endif
-#include "bsh.h"
+#include "sunsh.h"
 int restart = 0;
 
 void bsh_sigHandler(int sig_num);

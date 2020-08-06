@@ -8,7 +8,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h>
-#include "bsh.h"
+#include "sunsh.h"
 
 #define HOSTSIZE 1024
 #define BSH_PREDEFS 3
