@@ -22,11 +22,14 @@ void sunsh_loop(){
 
 	while(condition){
 		signal(SIGINT,sunsh_sigHandler);
-		char *userinfo = sunsh_getuserinfo();
-		command = sunsh_getline(userinfo);
-		bsplt = sunsh_split(command);
-		condition = sunsh_process(bsplt);
-		free(command);
+
+    char *userinfo = sunsh_getuserinfo(); //gets user's info and returns as a string
+		command = sunsh_getline(userinfo); //gets a line from STDIN
+		bsplt = sunsh_split(command); //tokenizes and splits the line from STDIN
+		condition = sunsh_process(bsplt); //processes the input, executes whenever necessary
+
+
+    free(command);
 		free(bsplt);
 		free(userinfo);
 	}
