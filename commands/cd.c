@@ -4,7 +4,7 @@
 #include <pwd.h>
 #include <unistd.h>
 
-void bsh_cd(char **dir){
+void sunsh_cd(char **dir){
 	struct passwd *p;
 	char *name;
 	//printf("%s",dir[0]);
@@ -24,17 +24,17 @@ void bsh_cd(char **dir){
 	if(dir[1]!=NULL){
 		if(strcmp(dir[1],"~")==0){
 			if(!chdir(home)==0){
-				printf("bsh: cd: %s: Error, no such directory\n",dir[1]);
+				printf("sunsh: cd: %s: Error, no such directory\n",dir[1]);
 			}
 		}
 		else if(strcmp(dir[1]," ")==0){
 			if(!chdir(home)==0){
-				printf("bsh: cd: %s: Error, no such directory\n",dir[1]);
+				printf("sunsh: cd: %s: Error, no such directory\n",dir[1]);
 			}
 		}
 		else
 			if(chdir(dir[1])!=0){
-				printf("bsh: cd: %s: Error, no such directory\n",dir[1]);
+				printf("sunsh: cd: %s: Error, no such directory\n",dir[1]);
 		}
 	}
 	else{

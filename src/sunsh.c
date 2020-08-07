@@ -7,34 +7,34 @@
 #include "sunsh.h"
 int restart = 0;
 
-void bsh_sigHandler(int sig_num);
+void sunsh_sigHandler(int sig_num);
 int main(int argc, const char **argv){
 
-	bsh_loop();//runs infinite loop
+	sunsh_loop();//runs infinite loop
 
 	return 0;
 }
 
-void bsh_loop(){
+void sunsh_loop(){
 	int condition=1;
 	char *command;
 	char **bsplt;
 
 	while(condition){
-		signal(SIGINT,bsh_sigHandler);
-		char *userinfo = bsh_getuserinfo();
-		command = bsh_getline(userinfo);	
-		bsplt = bsh_split(command);
-		condition = bsh_process(bsplt);
+		signal(SIGINT,sunsh_sigHandler);
+		char *userinfo = sunsh_getuserinfo();
+		command = sunsh_getline(userinfo);
+		bsplt = sunsh_split(command);
+		condition = sunsh_process(bsplt);
 		free(command);
 		free(bsplt);
 		free(userinfo);
 	}
 
 }
-void bsh_sigHandler(int sig_num){
+void sunsh_sigHandler(int sig_num){
 	if(sig_num == SIGINT){
-		signal(SIGINT,bsh_sigHandler);
+		signal(SIGINT,sunsh_sigHandler);
 #ifdef READLINE
 		rl_clear_history();
 #endif

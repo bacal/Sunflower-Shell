@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int bsh_cat(char **command){
+int sunsh_cat(char **command){
 	int i=1,count=0, opened = 0;
 	if(command[1]==NULL){
 		printf("Usage: cat <filename>\n");

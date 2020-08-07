@@ -11,7 +11,7 @@
 #include "sunsh.h"
 
 #define HOSTSIZE 1024
-#define BSH_PREDEFS 3
+#define sunsh_PREDEFS 3
 #define BUFFERSIZE 256
 #define BUFFER 64
 #define PATH_MAX 4096
@@ -21,7 +21,7 @@
 
 char *predefined[]={"cd","cat","create"};
 
-void bsh_create(char **command){
+void sunsh_create(char **command){
 	int i=1;
 	while(command[i]!=NULL){
 		FILE* fp = fopen(command[i],"w+");
@@ -31,18 +31,18 @@ void bsh_create(char **command){
 	}
 }
 
-void bsh_systemrun(char **command){
+void sunsh_systemrun(char **command){
 	int pid = fork();
 	if(pid==0){
 		if(execvp(command[0],command)<0){
-			printf("bsh: %s: command not found\n",command[0]);
+			printf("sunsh: %s: command not found\n",command[0]);
 			exit(0);
 		}
 	}
 	wait(NULL);
 }
 
-char* bsh_getuserinfo(){
+char* sunsh_getuserinfo(){
 	struct passwd *p;
 	int i=0;
 	char *name = calloc(40,sizeof(char));
@@ -92,20 +92,20 @@ char* bsh_getuserinfo(){
 
 
 #ifdef READLINE 
-char* bsh_getline(char *userinfo){
+char* sunsh_getline(char *userinfo){
 
 	char *command = readline(userinfo);
 
 	if(command!=NULL){
 		add_history(command);
-		append_history(strlen(command),"~/.bsh_history");
+		append_history(strlen(command),"~/.sunsh_history");
 	}
 	return command;
 }
 #endif
 
 #ifndef READLINE
-char* bsh_getline(char* userinfo){
+char* sunsh_getline(char* userinfo){
 	char *command =NULL;
 	size_t size =0;
 	printf("%s",userinfo);
@@ -119,39 +119,39 @@ char* bsh_getline(char* userinfo){
 	return command;
 }
 #endif
-int bsh_process(char **command){
+int sunsh_process(char **command){
 	int i=0;
-	bool bsh_ran=false;
+	bool sunsh_ran=false;
 
 	if(command[0]==NULL){
 		return 1;
 	}
-	for(i=0; i< BSH_PREDEFS; i++){
+	for(i=0; i< sunsh_PREDEFS; i++){
 		if(strcmp(command[0],predefined[i])==0){
-			bsh_built_in_execute(command); // executes the predefined arguement if it exists
-			bsh_ran=true;
+			sunsh_built_in_execute(command); // executes the predefined arguement if it exists
+			sunsh_ran=true;
 		}
 		else if (!strcmp(command[0],"exit"))
 			return 0;
 	}
 
-	if(bsh_ran == false){
-		bsh_systemrun(command);
+	if(sunsh_ran == false){
+		sunsh_systemrun(command);
 	}
 	return 1;
 }
 
-void bsh_built_in_execute(char **command){
+void sunsh_built_in_execute(char **command){
 	if(strcmp(command[0],"cd")==0)
-		bsh_cd(command);
+		sunsh_cd(command);
 	else if (strcmp(command[0],"cat")==0)
-		bsh_cat(command);
+		sunsh_cat(command);
 	else if (strcmp(command[0],"create")==0)
-		bsh_create(command);
+		sunsh_create(command);
 }
 
 
-char** bsh_split(char *str){
+char** sunsh_split(char *str){
 	int i =0,size=0;
 	char delim[] = " \t\r\n\v";
 	char **bsplt = calloc(PATH_MAX,sizeof(char));
