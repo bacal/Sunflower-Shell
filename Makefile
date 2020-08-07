@@ -9,7 +9,7 @@ CMDIR = commands/
 FLAGS=-O2 -Wall -lm -pedantic -lreadline -o
 
 all: sunsh.o sunsh_functions.o
-	if [ ! -d $(SYS) ]; then mkdir usr/ mkdir $(SYS); fi
+	if [ ! -d $(SYS) ]; then mkdir -p $(SYS); fi
 	$(CC) $(LIBS)$(NAME).o $(LIBS)$(NAME)_functions.o $(CMDLIBS)   $(FLAGS)  $(SYS)$(NAME)
 
 readline: readline_lib $(NAME).o
