@@ -1,4 +1,4 @@
-#A Makefile for the B-Shell!
+#A Makefile for the Sunflower Shell!
 CC=gcc
 NAME=sunsh
 LIBS=lib/
@@ -6,14 +6,14 @@ SOURCE=./src/
 SYS=usr/bin/
 CMDLIBS=$(LIBS)cat.o $(LIBS)cd.o $(LIBS)show.o
 CMDIR = commands/
-FLAGS=-O2 -Wall -lm -pedantic -lreadline -o
+FLAGS=-O3 -Wall -lm -pedantic -o
 
 all: sunsh.o sunsh_functions.o
 	if [ ! -d $(SYS) ]; then mkdir -p $(SYS); fi
 	$(CC) $(LIBS)$(NAME).o $(LIBS)$(NAME)_functions.o $(CMDLIBS)   $(FLAGS)  $(SYS)$(NAME)
 
 readline: readline_lib $(NAME).o
-	$(CC) $(LIBS)$(NAME).o $(LIBS)$(NAME)_functions.o $(CMDLIBS)   $(FLAGS)  $(SYS)$(NAME)
+	$(CC) $(LIBS)$(NAME).o $(LIBS)$(NAME)_functions.o $(CMDLIBS)  -lreadline $(FLAGS)  $(SYS)$(NAME)
 
 readline_lib: $(SOURCE)$(NAME)_functions.c builtin
 	$(CC) -c -D READLINE $(SOURCE)$(NAME)_functions.c $(FLAGS) $(LIBS)$(NAME)_functions.o
