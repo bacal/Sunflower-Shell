@@ -4,7 +4,7 @@ NAME=sunsh
 LIBS=lib/
 SOURCE=./src/
 SYS=usr/bin/
-CMDLIBS=$(LIBS)cat.o $(LIBS)cd.o
+CMDLIBS=$(LIBS)cat.o $(LIBS)cd.o $(LIBS)show.o
 CMDIR = commands/
 FLAGS=-O2 -Wall -lm -pedantic -lreadline -o
 
@@ -28,6 +28,7 @@ $(NAME)_functions.o: $(SOURCE)$(NAME)_functions.c builtin
 builtin:
 	$(CC) -c $(CMDIR)cat.c -o $(LIBS)cat.o
 	$(CC) -c $(CMDIR)cd.c -o $(LIBS)cd.o
+	$(CC) -c $(CMDIR)show.c -o $(LIBS)show.o
 
 install:
 	cp -r $(SYS)$(NAME) /$(SYS)

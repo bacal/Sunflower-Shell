@@ -29,7 +29,7 @@
 #include "sunsh.h"
 
 #define HOSTSIZE 1024
-#define sunsh_PREDEFS 3
+#define sunsh_PREDEFS 4
 #define BUFFERSIZE 256
 #define BUFFER 64
 #define PATH_MAX 4096
@@ -37,7 +37,7 @@
 
 
 
-char *predefined[]={"cd","cat","create"};
+char *predefined[]={"cd","cat","create","show"};
 
 void sunsh_create(char **command){
 	int i=1;
@@ -162,10 +162,13 @@ int sunsh_process(char **command){
 void sunsh_built_in_execute(char **command){
 	if(strcmp(command[0],"cd")==0)
 		sunsh_cd(command);
-	else if (strcmp(command[0],"cat")==0)
+	else if (!strcmp(command[0],"cat"))
 		sunsh_cat(command);
-	else if (strcmp(command[0],"create")==0)
+	else if (!strcmp(command[0],"create"))
 		sunsh_create(command);
+  else if (!strcmp(command[0],"show")){
+    sunsh_show(command);
+  }
 }
 
 
@@ -196,3 +199,5 @@ char** sunsh_split(char *str){
 	}
 	return bsplt;
 }
+
+

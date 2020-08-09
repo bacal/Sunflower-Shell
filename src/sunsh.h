@@ -9,3 +9,4 @@ void sunsh_create(char**);//create new files with the name inputted by the user
 void sunsh_cd(char**);//changes the directory
 int sunsh_cat(char**);//prints out the contents of a file
 void sunsh_sigHandler(int);
+void sunsh_show(char**); //shows copyright or warranty
