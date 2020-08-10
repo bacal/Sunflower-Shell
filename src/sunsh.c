@@ -40,16 +40,20 @@ void sunsh_loop(){
 
 	while(condition){
 		signal(SIGINT,sunsh_sigHandler);
+		
+		#ifndef MAC
+		char *userinfo = sunsh_getuserinfo(); //gets user's info and returns as a string.
+		#endif
+		#ifdef MAC
+		char userinfo[4] = "$> \0";
+		#endif
+		command = sunsh_getline(userinfo); //gets a line from STDIN.
+		bsplt = sunsh_split(command); //tokenizes and splits the line from STDIN.
+		condition = sunsh_process(bsplt); //processes the input, executes whenever necessary.
 
-    char *userinfo = sunsh_getuserinfo(); //gets user's info and returns as a string
-		command = sunsh_getline(userinfo); //gets a line from STDIN
-		bsplt = sunsh_split(command); //tokenizes and splits the line from STDIN
-		condition = sunsh_process(bsplt); //processes the input, executes whenever necessary
-
-
-    free(command);
+		free(command);
 		free(bsplt);
-		free(userinfo);
+//		free(userinfo);
 	}
 
 }
