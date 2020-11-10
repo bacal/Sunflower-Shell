@@ -4,5 +4,5 @@ A simple shell written in C
 Current built in commands are  
 - cd
 - cat
-- create (similar to touch)
+- create - creates empty files, can do multiple (has no options)
 - exit
