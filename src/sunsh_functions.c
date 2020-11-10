@@ -23,8 +23,10 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/wait.h>
+#ifdef READLINE
 #include <readline/readline.h>
 #include <readline/history.h>
+#endif
 #include <signal.h>
 #include "sunsh.h"
 
@@ -122,7 +124,7 @@ char* sunsh_getline(char *userinfo){
 }
 #endif
 
-#ifndef READLINE
+#else
 char* sunsh_getline(char* userinfo){
 	char *command =NULL;
 	size_t size =0;
