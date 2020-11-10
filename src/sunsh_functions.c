@@ -122,7 +122,6 @@ char* sunsh_getline(char *userinfo){
 	}
 	return command;
 }
-#endif
 
 #else
 char* sunsh_getline(char* userinfo){
