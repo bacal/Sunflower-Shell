@@ -66,10 +66,10 @@ char* sunsh_getuserinfo(){
 	struct passwd *p;
 	int i=0;
 	char *name = calloc(40,sizeof(char));
-	char *userinfo=calloc(60,sizeof(char));
+	char *userinfo=calloc(60+PATH_MAX+40,sizeof(char));
 	char *hostname=calloc(HOSTSIZE,sizeof(char));//allocates hostsize characters to hostname array
 	char *cwd = calloc(PATH_MAX,sizeof(char)); //allocates PATH_MAX bytes to the cwd array
-	char **wd_split = calloc(PATH_MAX,sizeof(char));
+	//char **wd_split = calloc(PATH_MAX,sizeof(char));
 	char delim[] = "/";
 
 	*name = '\0';
@@ -83,30 +83,32 @@ char* sunsh_getuserinfo(){
 
 	gethostname(hostname,HOSTSIZE);//gets hostname
 	if(getcwd(cwd,PATH_MAX)==NULL){
-		strcat(" ",cwd);
+		strcpy("",cwd);
+		char* token = strtok(cwd,delim);
+		while(token)
+		  {
+		    strcpy(cwd,token);
+		    strtok(cwd,NULL);
+		  }
 	}
 
+	
+	
+	strcpy(userinfo,name);
+	strcat(userinfo,"@");
+	strcat(userinfo,hostname);
+       	strcat(userinfo," ");
+	strcat(userinfo,cwd);
+	strcat(userinfo," % ");
+	
 
-	wd_split[i] = strtok(cwd,delim);
-	while(wd_split[i]!=NULL){
-		i++;
-		wd_split[i] = strtok(NULL,delim);
-	}
-	if(i>1){
-		if(!strcmp(wd_split[0],"home")&& !strcmp(wd_split[1],name)){
-			strcpy(cwd,"~");
-		}
-		for(int j=2; j<i;j++){
-			strcat(cwd,"/");
-			strcat(cwd,wd_split[j]);
-		}
-	}
+	//wd_split[i] = strtok(cwd,delim);
+	//printf(userinfo,"[%s@%s]:%s$ ",name,hostname,cwd);
 
-	sprintf(userinfo,"[%s@%s]:%s$ ",name,hostname,cwd);
 	free(name);
 	free(hostname);
 	free(cwd);
-	free(wd_split);
+	//	free(wd_split);
 	return userinfo;
 }
 
@@ -129,11 +131,11 @@ char* sunsh_getline(char* userinfo){
 	size_t size =0;
 	printf("%s",userinfo);
 	if(getline(&command,&size,stdin)<0){ //gets a line from standard input
-		free(command);
-		command = calloc(6,sizeof(char));
-		command[0] = '\0';
-		printf("exit\n");
-		strcat(command,"exit");
+	  free(command);
+	  command = calloc(6,sizeof(char));
+	  command[0] = '\0';
+	  printf("exit\n");
+	  strcat(command,"exit");
 	}
 	return command;
 }
@@ -167,9 +169,9 @@ void sunsh_built_in_execute(char **command){
 		sunsh_cat(command);
 	else if (!strcmp(command[0],"create"))
 		sunsh_create(command);
-  else if (!strcmp(command[0],"show")){
-    sunsh_show(command);
-  }
+	else if (!strcmp(command[0],"show")){
+	  sunsh_show(command);
+	}
 }
 
 
