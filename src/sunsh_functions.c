@@ -169,9 +169,9 @@ void sunsh_built_in_execute(char **command){
 		sunsh_cat(command);
 	else if (!strcmp(command[0],"create"))
 		sunsh_create(command);
-	else if (!strcmp(command[0],"show")){
-	  sunsh_show(command);
-	}
+	/* else if (!strcmp(command[0],"show")){ */
+	/*     sunsh_show(command); */
+	/* } */
 }
 
 
