@@ -43,8 +43,7 @@ void sunsh_loop(){
 		
 		#ifndef MAC
 		char *userinfo = sunsh_getuserinfo(); //gets user's info and returns as a string.
-		#endif
-		#ifdef MAC
+		#else
 		char userinfo[4] = "$> \0";
 		#endif
 		command = sunsh_getline(userinfo); //gets a line from STDIN.
