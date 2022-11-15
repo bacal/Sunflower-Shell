@@ -19,11 +19,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-#ifdef READLINE
-#include <readline/readline.h>
-#endif
 #include "sunsh.h"
 int restart = 0;
+
 
 void sunsh_sigHandler(int sig_num);
 int main(int argc, const char **argv){
@@ -42,7 +40,7 @@ void sunsh_loop(){
 		signal(SIGINT,sunsh_sigHandler);
 		
 		#ifndef MAC
-		char *userinfo = sunsh_getuserinfo(); //gets user's info and returns as a string.
+		char* userinfo = sunsh_getuserinfo(); //gets user's info and returns as a string.
 		#else
 		char userinfo[4] = "$> \0";
 		#endif
@@ -59,9 +57,6 @@ void sunsh_loop(){
 void sunsh_sigHandler(int sig_num){
 	if(sig_num == SIGINT){
 		signal(SIGINT,sunsh_sigHandler);
-#ifdef READLINE
-		rl_clear_history();
-#endif
 	}
 
 }

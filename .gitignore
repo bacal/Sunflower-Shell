@@ -2,3 +2,4 @@ bsh
 lib/*
 !lib/.gitkeep
 usr/bin
+.idea/**

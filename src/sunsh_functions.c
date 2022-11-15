@@ -23,23 +23,19 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/wait.h>
-#ifdef READLINE
-#include <readline/readline.h>
-#include <readline/history.h>
-#endif
 #include <signal.h>
 #include "sunsh.h"
 
 #define HOSTSIZE 1024
 #define sunsh_PREDEFS 4
-#define BUFFERSIZE 256
-#define BUFFER 64
 #define PATH_MAX 4096
 
+static char userinfo[60+PATH_MAX+40];
+static char cwd[PATH_MAX];
+static char hostname[HOSTSIZE];
 
 
-
-char *predefined[]={"cd","cat","create","show"};
+static const char *predefined[]={"cd","cat","create","show"};
 
 void sunsh_create(char **command){
 	int i=1;
@@ -64,12 +60,7 @@ void sunsh_systemrun(char **command){
 
 char* sunsh_getuserinfo(){
 	struct passwd *p;
-	int i=0;
 	char *name = calloc(40,sizeof(char));
-	char *userinfo=calloc(60+PATH_MAX+40,sizeof(char));
-	char *hostname=calloc(HOSTSIZE,sizeof(char));//allocates hostsize characters to hostname array
-	char *cwd = calloc(PATH_MAX,sizeof(char)); //allocates PATH_MAX bytes to the cwd array
-	//char **wd_split = calloc(PATH_MAX,sizeof(char));
 	char delim[] = "/";
 
 	*name = '\0';
@@ -88,44 +79,24 @@ char* sunsh_getuserinfo(){
 		while(token)
 		  {
 		    strcpy(cwd,token);
-		    strtok(cwd,NULL);
+		    strtok(cwd,"");
 		  }
 	}
 
-	
-	
 	strcpy(userinfo,name);
 	strcat(userinfo,"@");
 	strcat(userinfo,hostname);
-       	strcat(userinfo," ");
+	strcat(userinfo," ");
 	strcat(userinfo,cwd);
 	strcat(userinfo," % ");
 	
 
 	//wd_split[i] = strtok(cwd,delim);
 	//printf(userinfo,"[%s@%s]:%s$ ",name,hostname,cwd);
-
-	free(name);
-	free(hostname);
-	free(cwd);
 	//	free(wd_split);
 	return userinfo;
 }
 
-
-#ifdef READLINE 
-char* sunsh_getline(char *userinfo){
-
-	char *command = readline(userinfo);
-
-	if(command!=NULL){
-		add_history(command);
-		append_history(strlen(command),"~/.sunsh_history");
-	}
-	return command;
-}
-
-#else
 char* sunsh_getline(char* userinfo){
 	char *command =NULL;
 	size_t size =0;
@@ -139,7 +110,7 @@ char* sunsh_getline(char* userinfo){
 	}
 	return command;
 }
-#endif
+
 int sunsh_process(char **command){
 	int i=0;
 	bool sunsh_ran=false;
